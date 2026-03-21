@@ -29,17 +29,29 @@ const PredictionForm = () => {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<PredictionResult | null>(null);
   const [error, setError] = useState("");
+  const [showLimitPopup, setShowLimitPopup] = useState(false);
+  const [credits, setCredits] = useState(() => {
+  const saved = localStorage.getItem("credits");
+  return saved ? parseInt(saved) : 3;
+});
 
   const handleChange = (field: string, value: string) => {
     setForm((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
-    setResult(null);
-    setLoading(true);
+  e.preventDefault();
 
+  // ✅ ADD THIS BLOCK
+  if (!localStorage.getItem("isLoggedIn") && credits <= 0) {
+    setShowLimitPopup(true);
+    return;
+    
+  }
+
+  setError("");
+  setResult(null);
+  setLoading(true);
     try {
       const payload = {
         city: form.city,
@@ -51,7 +63,7 @@ const PredictionForm = () => {
         property_age: parseInt(form.property_age),
       };
 
-      const res = await fetch("http://13.60.105.183:5000/predict", {
+      const res = await fetch("http://127.0.0.1:5000/predict", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -60,6 +72,11 @@ const PredictionForm = () => {
       if (!res.ok) throw new Error("Prediction failed");
       const data = await res.json();
       setResult(data);
+      if (!localStorage.getItem("isLoggedIn") && credits > 0) {
+  const newCredits = credits - 1;
+  setCredits(newCredits);
+  localStorage.setItem("credits", newCredits.toString());
+}
     } catch {
       setError("Could not connect to prediction server. Make sure the Flask API is running on port 5000.");
     } finally {
@@ -82,6 +99,7 @@ const PredictionForm = () => {
             Enter your property details and let our AI predict the market value
           </p>
         </div>
+      
 
         <div className="card-elevated p-6 md:p-10 max-w-3xl mx-auto">
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -103,6 +121,21 @@ const PredictionForm = () => {
                 <InputField icon={<Calendar className="w-4 h-4" />} label="Property Age (years)" value={form.property_age} onChange={(v) => handleChange("property_age", v)} type="number" placeholder="e.g. 5" />
               </div>
             </div>
+
+            {!localStorage.getItem("isLoggedIn") && (
+  <div className="flex justify-between items-center mb-3 p-3 rounded-lg bg-gold/10 border border-gold/30">
+    
+    <div className="text-sm">
+      <span className="text-muted-foreground">Credits:</span>{" "}
+      <span className="font-bold text-gold">{credits}</span>
+    </div>
+
+    <div className="text-xs text-muted-foreground">
+      Cost: <span className="font-semibold text-gold">1 / use</span>
+    </div>
+
+  </div>
+)}
 
             <button
               type="submit"
@@ -145,6 +178,41 @@ const PredictionForm = () => {
           )}
         </div>
       </div>
+      {showLimitPopup && (
+  <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    
+    <div className="bg-white rounded-xl p-6 w-[90%] max-w-sm text-center shadow-xl">
+      
+      <h2 className="text-lg font-bold mb-2">
+        Free Limit Reached 🚫
+      </h2>
+      
+      <p className="text-sm text-gray-600 mb-4">
+        You’ve used all your free credits.
+        Please login or signup to continue.
+      </p>
+
+      <div className="flex gap-3 justify-center">
+        
+        <button
+          onClick={() => (window.location.href = "/login")}
+          className="px-4 py-2 bg-yellow-500 text-black rounded-lg font-semibold"
+        >
+          Login
+        </button>
+
+        <button
+          onClick={() => setShowLimitPopup(false)}
+          className="px-4 py-2 border rounded-lg"
+        >
+          Cancel
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+)}
     </section>
   );
 };

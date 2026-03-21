@@ -10,7 +10,7 @@ import NotFound from "./pages/NotFound";
 import { Navigate } from "react-router-dom";
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("isLoggedIn");
   if (!token) return <Navigate to="/login" replace />;
   return <>{children}</>;
 };
@@ -26,7 +26,7 @@ const App = () => (
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
+          <Route path="/" element={<Index />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
