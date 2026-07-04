@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Building2, Mail, Lock, Loader2, Eye, EyeOff, TrendingUp, MapPin, Sparkles } from "lucide-react";
-
-const API_BASE = "http://127.0.0.1:5000";
+import { API_BASE } from "@/lib/api";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -27,7 +26,7 @@ const Login = () => {
 
     if (!res.ok) throw new Error(data.error || "Login failed");
 
-    localStorage.setItem("token", "loggedin");
+    localStorage.setItem("isLoggedIn", "true");
 
     navigate("/");
 

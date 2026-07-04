@@ -1,73 +1,57 @@
-# Welcome to your Lovable project
+# Punjab Property AI
 
-## Project info
+AI-powered property price prediction for Punjab & Tricity.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## Tech Stack
 
-## How can I edit this code?
+- **React 18** + **TypeScript**
+- **Vite 5** (dev server on port `8080`)
+- **Tailwind CSS 3** + **shadcn-ui**
+- **React Router v6** for routing
+- **TanStack React Query** for data fetching
+- Backend: **Flask API** at `http://127.0.0.1:5000` (separate repo)
 
-There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+## Getting Started
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+# Install dependencies
+npm install
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Start development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+The app will be available at `http://localhost:8080`.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Backend API
 
-**Use GitHub Codespaces**
+The frontend expects a Flask server running at `http://127.0.0.1:5000` with these endpoints:
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+| Method | Endpoint | Request Body | Response |
+|--------|----------|-------------|----------|
+| `POST` | `/login` | `{ email, password }` | `200` or `{ error }` |
+| `POST` | `/signup` | `{ name, email, password }` | `200` or `{ error }` |
+| `POST` | `/predict` | `{ city, bhk, area_sqft, furnishing, bathroom, parking, property_age }` | `{ predicted_price }` |
 
-## What technologies are used for this project?
+## Project Structure
 
-This project is built with:
+```
+src/
+├── pages/          # Route pages (Index, Login, Signup, Predict, NotFound)
+├── components/     # UI components (Navbar, HeroSection, PredictionForm, etc.)
+├── hooks/          # Custom React hooks
+├── lib/            # Utilities and shared config (api.ts, utils.ts)
+└── assets/         # Static assets
+```
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## Available Scripts
 
-## How can I deploy this project?
+- `npm run dev` — Start dev server
+- `npm run build` — Production build
+- `npm run preview` — Preview production build
+- `npm run test` — Run tests
+- `npm run lint` — Lint code
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+## License
 
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+© 2026 Punjab Property AI. All Rights Reserved.

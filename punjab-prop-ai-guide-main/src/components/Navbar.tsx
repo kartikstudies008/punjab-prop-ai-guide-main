@@ -1,8 +1,20 @@
-import { Building2, LogIn, UserPlus } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Building2, LogIn, UserPlus, Sun, Moon } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useTheme } from "next-themes";
 
 const Navbar = () => {
   const isLoggedIn = localStorage.getItem("isLoggedIn");
+  const { theme, setTheme, resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const toggleTheme = () => {
+    setTheme(resolvedTheme === "dark" ? "light" : "dark");
+  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b">
@@ -24,6 +36,21 @@ const Navbar = () => {
           <a href="#about" className="hidden md:block text-muted-foreground hover:text-foreground transition-colors">
             About
           </a>
+
+          {/* Theme Toggle */}
+          {mounted && (
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary/50 transition-colors"
+              aria-label="Toggle theme"
+            >
+              {resolvedTheme === "dark" ? (
+                <Sun className="w-4 h-4 text-gold" />
+              ) : (
+                <Moon className="w-4 h-4 text-primary" />
+              )}
+            </button>
+          )}
 
           {/* 👇 LOGIN / LOGOUT LOGIC */}
           {isLoggedIn ? (
