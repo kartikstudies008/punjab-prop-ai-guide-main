@@ -7,7 +7,7 @@
 
 ## 📋 Table of Contents
 
-1. [Project Overview](#1-project-overview)
+1. [Project Overview](#1-project-overview).
 2. [Tech Stack](#2-tech-stack)
 3. [System Architecture](#3-system-architecture)
 4. [Project Structure](#4-project-structure)
